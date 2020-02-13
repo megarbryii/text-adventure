@@ -1,0 +1,74 @@
+.game-wrapper {
+    font-family: $game-font;
+    font-size: 3rem;
+    display: grid;
+    grid-template-columns: [s] 2fr [m] 1fr [e];
+    grid-column-gap: 15px;
+    
+    .left-side{
+        grid-column: s/m;
+        grid-template-rows: [name-s] 60px [name-e output-s] 1fr [output-e input-s] 35px [input-e];
+
+        .game-room-name{
+            grid-row: name-s/name-e;
+            text-align: center;
+
+            h2{
+                margin: 10px 0;
+            }
+        }
+
+        .game-output{
+            grid-row: output-s/output-e;
+            border: 3px solid $main-color;
+            height: 525px;
+            margin-bottom: 20px;
+            background-color: black;
+            //overflow-y: auto;
+        }
+
+        .btn-output {
+            display: grid;
+            grid-row: input-s/input-e;
+            grid-template-columns: repeat(4, auto);
+            grid-gap: 15px;
+
+            .btn {
+                background-color: $hover-color;
+                color: black;
+                padding: 3px;
+
+                &:hover {
+                    opacity: .75;
+                    color: white;
+                }
+            }
+        }
+        
+           
+    }
+
+    .right-side{
+        grid-column: m/e;
+        grid-template-rows: [inv-s] 60px [inv-e invout-s] 1fr [invout-e];
+        grid-row-gap: 5px;
+
+
+        .game-inventory{
+            grid-row: inv-s/inv-e;
+            text-align: center;
+
+            h3{
+                margin: 0;
+            }
+        }
+
+        .inventory-output{
+            grid-row: invout-s/invout-e;
+            height: 525px;
+            border: 2px solid $main-color;
+            background-color: black;
+            overflow-y: auto;
+        }
+    }
+}
