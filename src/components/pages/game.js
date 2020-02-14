@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
+import GameOutput from '../game/gameOutput';
+import Inventory from '../game/inventory';
+
 import textNodes from '../test/map';
+import inventory from '../game/inventory';
 
 let output = [];
 
@@ -14,7 +18,7 @@ export default class Game extends Component {
 
         this.state ={
            items: [] ,
-           currentTextNode: "get I get here"
+           currentTextNode: []
         }
     }
 
@@ -22,7 +26,8 @@ export default class Game extends Component {
 
     gameStart = () => {
         this.setState = ({
-           items: []
+           items: [],
+           currentTextNode: []
         });
 
         this.showTextNode(4);  
@@ -32,25 +37,24 @@ export default class Game extends Component {
         const textNode = textNodes[textNodeIndex];
         this.setState = ({
             currentTextNode: textNode
-        }, () => {
-            console.log(this.state.currentTextNode, ": current text node")
         })
-        output = textNode.text;
+        console.log(this.state.currentTextNode, ": current text node")
+        output = this.state.currentTextNode.text;
         return textNodeIndex;
     }
 
     optionButtons = (textNodeIndex) => {
         const textNode = textNodes[textNodeIndex];
         textNode.options.map(option => {
-            
-                return (
-                    <button 
-                    key={option.id}
-                    className='btn'
-                    onClick={() => this.selectOption(option)}>
-                        {option.text}
-                    </button>
-                )  
+            if (this.showOption(option)) {
+            return (
+                <button 
+                key={option.id}
+                className='btn'
+                onClick={() => this.selectOption(option)}>
+                    {option.text}
+                </button>
+            )}  
         })
     }
 
@@ -67,11 +71,12 @@ export default class Game extends Component {
     }
 
     showInventory = () => {
-        inventory.map(item, index => {
+        inventory.map(item => {
             return(
-                <li key={index}>
-                    {item.name}
-                </li>
+                <Inventory
+                    key={inventory.id}
+                    name={inventory.name}
+                />
             )
         })
     }
@@ -84,16 +89,14 @@ export default class Game extends Component {
         return(
             <div className='game-wrapper'>
                 <div className='left-side'>
-                    <div className='game-room-name'>
-                        <h2>{this.state.currentTextNode.name}</h2>
-                    </div>
 
-                    <div className='game-output'>
-                        <p style={{ whiteSpace: 'pre-line' }}>{output}</p>
-                    </div>
+                    <GameOutput 
+                        name={this.state.currentTextNode.name}
+                        text={this.state.currentTextNode.text}
+                    />
 
                     <div className='btn-output'>
-                        {this.optionButtons}
+                        {this.optionButtons()}
                     </div>
       
                 </div>
@@ -107,7 +110,7 @@ export default class Game extends Component {
 
                     <div className='inventory-output'>
                         <ul>
-                            {this.showInventory}
+                            {this.showInventory()}
                         </ul>
                     </div>
                 </div>
