@@ -6,7 +6,8 @@ import Inventory from '../game/inventory';
 import textNodes from '../test/map';
 import inventory from '../game/inventory';
 
-let output = [];
+var output;
+var name;
 
 
 
@@ -25,38 +26,25 @@ export default class Game extends Component {
 
 
     gameStart = () => {
-        this.setState = ({
+        this.setState({
            items: [],
            currentTextNode: []
-        });
+        })
 
         this.showTextNode(4);  
     }
 
     showTextNode = (textNodeIndex) => {
-        const textNode = textNodes[textNodeIndex];
-        this.setState = ({
-            currentTextNode: textNode
-        })
-        console.log(this.state.currentTextNode, ": current text node")
-        output = this.state.currentTextNode.text;
+        const textNode = textNodes.filter(el => textNodes.id === textNodeIndex);
+        output = textNode.text;
+        name = textNode.name;
+
+        
+          
+
         return textNodeIndex;
     }
 
-    optionButtons = (textNodeIndex) => {
-        const textNode = textNodes[textNodeIndex];
-        textNode.options.map(option => {
-            if (this.showOption(option)) {
-            return (
-                <button 
-                key={option.id}
-                className='btn'
-                onClick={() => this.selectOption(option)}>
-                    {option.text}
-                </button>
-            )}  
-        })
-    }
 
     showOption = (option) => {
         return option.requiredState == null || option.requiredState(state);
@@ -83,7 +71,7 @@ export default class Game extends Component {
 
     render(){
 
-        const inventory = this.state.items;
+        
         this.gameStart();
 
         return(
@@ -91,12 +79,12 @@ export default class Game extends Component {
                 <div className='left-side'>
 
                     <GameOutput 
-                        name={this.state.currentTextNode.name}
-                        text={this.state.currentTextNode.text}
+                        name={name}
+                        text={output}
                     />
 
                     <div className='btn-output'>
-                        {this.optionButtons()}
+                        
                     </div>
       
                 </div>
@@ -110,7 +98,7 @@ export default class Game extends Component {
 
                     <div className='inventory-output'>
                         <ul>
-                            {this.showInventory()}
+                            
                         </ul>
                     </div>
                 </div>
