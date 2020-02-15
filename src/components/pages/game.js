@@ -4,12 +4,11 @@ import GameOutput from '../game/gameOutput';
 import Inventory from '../game/inventory';
 
 import textNodes from '../test/map';
-import inventory from '../game/inventory';
 
 var output;
 var name;
 
-
+const textNode = textNodes.filter(textNode => textNodes.id === textNodes[textNodes.id]);
 
 
 
@@ -17,8 +16,8 @@ export default class Game extends Component {
     constructor(props){
         super(props);
 
-        this.state ={
-           items: [] ,
+        this.state = {
+           items: [],
            currentTextNode: []
         }
     }
@@ -26,53 +25,54 @@ export default class Game extends Component {
 
 
     gameStart = () => {
-        this.setState({
-           items: [],
-           currentTextNode: []
-        })
-
+        
         this.showTextNode(4);  
     }
 
     showTextNode = (textNodeIndex) => {
-        const textNode = textNodes.filter(el => textNodes.id === textNodeIndex);
-        output = textNode.text;
-        name = textNode.name;
+        this.setState({ currentTextNode: textNode })
+       
+        output = this.state.currentTextNode.text;
+        name = this.state.currentTextNode.name;
 
         
           
 
-        return textNodeIndex;
     }
 
 
-    showOption = (option) => {
-        return option.requiredState == null || option.requiredState(state);
-    }
-
-    selectOption = (option) => {
-        const nextTextNodeId = option.nextText;
-        if (nextTextNodeId === -1) {
-            this.gameStart();
-        }
-        this.showTextNode(nextTextNodeId);
-    }
+    
 
     showInventory = () => {
-        inventory.map(item => {
+        this.state.items.map(item => {
             return(
                 <Inventory
-                    key={inventory.id}
-                    name={inventory.name}
+                    key={item.id}
+                    name={item.name}
                 />
             )
         })
+    } 
+    
+    componentWillMount = () => {
+        this.gameStart();
+        this.setState({
+            items: [],
+            currentTextNode: textNodes[4]
+         })
+
+         console.log("current state", this.state.currentTextNode)
+ 
     }
 
-    render(){
-
+    componentDidUpdate = () => {
         
-        this.gameStart();
+    }
+
+
+
+    render(){
+        
 
         return(
             <div className='game-wrapper'>
@@ -82,6 +82,7 @@ export default class Game extends Component {
                         name={name}
                         text={output}
                     />
+        
 
                     <div className='btn-output'>
                         
@@ -93,12 +94,12 @@ export default class Game extends Component {
                     
 
                     <div className='game-inventory'>
-                        <h3>Inventory</h3>
+                        <h2>Inventory</h2>
                     </div>
 
                     <div className='inventory-output'>
                         <ul>
-                            
+                            {this.showInventory()}
                         </ul>
                     </div>
                 </div>

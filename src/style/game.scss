@@ -9,23 +9,6 @@
         grid-column: s/m;
         grid-template-rows: [name-s] 60px [name-e output-s] 1fr [output-e input-s] 35px [input-e];
 
-        .game-room-name{
-            grid-row: name-s/name-e;
-            text-align: center;
-
-            h2{
-                margin: 10px 0;
-            }
-        }
-
-        .game-output{
-            grid-row: output-s/output-e;
-            border: 3px solid $main-color;
-            height: 525px;
-            margin-bottom: 20px;
-            background-color: black;
-            //overflow-y: auto;
-        }
 
         .btn-output {
             display: grid;
@@ -58,8 +41,8 @@
             grid-row: inv-s/inv-e;
             text-align: center;
 
-            h3{
-                margin: 0;
+            h2 {
+                margin: 10px 0;
             }
         }
 
