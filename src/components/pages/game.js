@@ -19,7 +19,7 @@ export default class Game extends Component {
 
         this.state = {
            items: [],
-           currentTextNode: textNodes[4]
+           currentTextNode: []
         }
     }
 
