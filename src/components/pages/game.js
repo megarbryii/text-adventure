@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import GameOutput from '../game/gameOutput';
 import Inventory from '../game/inventory';
+import GameButton from '../game/gameButtons';
 
 import textNodes from '../test/map';
 
@@ -18,29 +19,46 @@ export default class Game extends Component {
 
         this.state = {
            items: [],
-           currentTextNode: []
+           currentTextNode: textNodes[4]
         }
     }
 
 
 
     gameStart = () => {
-        
+        this.setState({ items: [] })
+        this.setState({ currentTextNode: textNodes[4] })
         this.showTextNode(4);  
     }
 
     showTextNode = (textNodeIndex) => {
-        this.setState({ currentTextNode: textNode })
+        console.log('Current state', this.state.currentTextNode)
+        this.setState({ currentTextNode: textNodes[textNodeIndex] })
        
         output = this.state.currentTextNode.text;
         name = this.state.currentTextNode.name;
-
-        
-          
-
+        console.log('Updated state', this.state.currentTextNode)
     }
 
-
+    showOptionButton = (option) => {
+        console.log('option state', this.state.currentTextNode.options);
+        this.state.currentTextNode.options.map(index => {
+            <GameButton key={index}
+            text={index.text}
+        />
+        })
+        
+    }
+    
+    
+        
+    selectOption = (option) => {
+        const nextTextNodeId = option.nextText;
+        if (nextTextNodeId === -1) {
+            this.gameStart();
+        }
+        this.showTextNode(nextTextNodeId);
+    }
     
 
     showInventory = () => {
@@ -56,12 +74,6 @@ export default class Game extends Component {
     
     componentWillMount = () => {
         this.gameStart();
-        this.setState({
-            items: [],
-            currentTextNode: textNodes[4]
-         })
-
-         console.log("current state", this.state.currentTextNode)
  
     }
 
@@ -85,7 +97,7 @@ export default class Game extends Component {
         
 
                     <div className='btn-output'>
-                        
+                        {this.showOptionButton()}
                     </div>
       
                 </div>

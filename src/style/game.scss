@@ -7,7 +7,7 @@
     
     .left-side{
         grid-column: s/m;
-        grid-template-rows: [name-s] 60px [name-e output-s] 1fr [output-e input-s] 35px [input-e];
+        grid-template-rows: [name-s] 60px [name-e output-s] 1fr [output-e input-s] 60px [input-e];
 
 
         .btn-output {
