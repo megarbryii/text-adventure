@@ -16,8 +16,12 @@
     .output-text {
         grid-row: output-s/output-e;
         border: 3px solid $main-color;
-        height: 525px;
+        height: 450px;
         margin-bottom: 20px;
         background-color: black;
+
+        p { 
+            padding: 20px;
+        }
     }
 }

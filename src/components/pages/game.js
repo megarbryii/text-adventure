@@ -9,7 +9,7 @@ import textNodes from '../test/map';
 var output;
 var name;
 
-const textNode = textNodes.filter(textNode => textNodes.id === textNodes[textNodes.id]);
+const textNode = textNodes[textNodes.id]
 
 
 
@@ -26,28 +26,36 @@ export default class Game extends Component {
 
 
     gameStart = () => {
-        this.setState({ items: [] })
-        this.setState({ currentTextNode: textNodes[4] })
-        this.showTextNode(4);  
+        this.setState({ 
+            items: {
+                name: 'Paint can',
+                paintCan: true
+            },
+            currentTextNode: textNodes[0] 
+        }) 
     }
 
     showTextNode = (textNodeIndex) => {
-        console.log('Current state', this.state.currentTextNode)
         this.setState({ currentTextNode: textNodes[textNodeIndex] })
        
         output = this.state.currentTextNode.text;
         name = this.state.currentTextNode.name;
-        console.log('Updated state', this.state.currentTextNode)
+        
     }
 
-    showOptionButton = (option) => {
-        console.log('option state', this.state.currentTextNode.options);
-        this.state.currentTextNode.options.map(index => {
-            <GameButton key={index}
-            text={index.text}
-        />
+    showOptionButtons = () => {
+        console.log('button options state', this.state.currentTextNode.options);
+        const choices = this.state.currentTextNode.options;
+        choices.map((choice, index) => {
+            return(
+                <GameButton
+                    key={index}
+                    className={this.props.className}
+                    onClick={this.props.onClick}
+                    text={choice.text}
+                />
+            )
         })
-        
     }
     
     
@@ -55,33 +63,32 @@ export default class Game extends Component {
     selectOption = (option) => {
         const nextTextNodeId = option.nextText;
         if (nextTextNodeId === -1) {
-            this.gameStart();
+            this.setState({
+                items: [],
+                currentTextNode: textNodes[0]
+            });
+            this.showTextNode(0);
         }
         this.showTextNode(nextTextNodeId);
     }
-    
 
-    showInventory = () => {
-        this.state.items.map(item => {
-            return(
-                <Inventory
-                    key={item.id}
-                    name={item.name}
-                />
-            )
-        })
-    } 
+    showInventory = () => {
+        console.log('inventory state', this.state.items)
+    } 
+    
     
     componentWillMount = () => {
         this.gameStart();
- 
+    }
+    
+
+    componentDidMount = () => {
+        if(this.state.currentTextNode != []) {
+            this.showTextNode(0);
+        }
     }
 
-    componentDidUpdate = () => {
-        
-    }
-
-
+    
 
     render(){
         
@@ -97,7 +104,12 @@ export default class Game extends Component {
         
 
                     <div className='btn-output'>
-                        {this.showOptionButton()}
+                        {this.showOptionButtons()}
+                        <button  
+                            className='btn' 
+                            onClick={() => this.showTextNode(3)}>
+                            Test
+                        </button>
                     </div>
       
                 </div>

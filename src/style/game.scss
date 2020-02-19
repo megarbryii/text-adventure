@@ -15,11 +15,14 @@
             grid-row: input-s/input-e;
             grid-template-columns: repeat(4, auto);
             grid-gap: 15px;
+            padding: 25px 15px;
 
             .btn {
+                font-family: $game-font;
+                font-size: 2rem;
                 background-color: $hover-color;
                 color: black;
-                padding: 3px;
+                padding: 5px;
 
                 &:hover {
                     opacity: .75;
@@ -48,7 +51,7 @@
 
         .inventory-output{
             grid-row: invout-s/invout-e;
-            height: 525px;
+            height: 452px;
             border: 2px solid $main-color;
             background-color: black;
             overflow-y: auto;
