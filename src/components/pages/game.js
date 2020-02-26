@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import GameOutput from '../game/gameOutput';
 import Inventory from '../game/inventory';
-import GameButton from '../game/gameButtons';
 
 import textNodes from '../test/map';
 
@@ -27,12 +26,10 @@ export default class Game extends Component {
 
     gameStart = () => {
         this.setState({ 
-            items: {
-                name: 'Paint can',
-                paintCan: true
-            },
-            currentTextNode: textNodes[0] 
-        }) 
+            items: [],
+            currentTextNode: [] 
+        })
+        this.showTextNode(0);
     }
 
     showTextNode = (textNodeIndex) => {
@@ -43,29 +40,13 @@ export default class Game extends Component {
         
     }
 
-    showOptionButtons = () => {
-        console.log('button options state', this.state.currentTextNode.options);
-        const choices = this.state.currentTextNode.options;
-        choices.map((choice, index) => {
-            return(
-                <GameButton
-                    key={index}
-                    className={this.props.className}
-                    onClick={this.props.onClick}
-                    text={choice.text}
-                />
-            )
-        })
-    }
-    
-    
         
     selectOption = (option) => {
-        const nextTextNodeId = option.nextText;
+        const nextTextNodeId = this.state.currentTextNode.options.nextText;
         if (nextTextNodeId === -1) {
             this.setState({
                 items: [],
-                currentTextNode: textNodes[0]
+                currentTextNode: []
             });
             this.showTextNode(0);
         }
@@ -73,12 +54,15 @@ export default class Game extends Component {
     }
 
     showInventory = () => {
-        console.log('inventory state', this.state.items)
+        console.log('Inventory function: ', this.state.items)
     } 
     
     
     componentWillMount = () => {
         this.gameStart();
+        console.log('Component Will Mount Inventory: ', this.state.items);
+        console.log('Component Will Mount TextNode:', this.state.currentTextNode.options);
+        
     }
     
 
@@ -86,12 +70,29 @@ export default class Game extends Component {
         if(this.state.currentTextNode != []) {
             this.showTextNode(0);
         }
+        console.log('Component Did Mount TextNode: ', this.state.currentTextNode.options);
+    }
+
+    componentDidUpdate = () => {
+        
     }
 
     
 
     render(){
         
+        const showButtons = this.state.currentTextNode.options.map(option => {
+            console.log('Render from variable showButtons: ', this.state.currentTextNode.options);
+            return (
+                <button 
+                    key={option.text}
+                    className='btn'
+                    onClick={this.selectOption}
+                >
+                    {option.text}
+                </button>
+            )
+        })
 
         return(
             <div className='game-wrapper'>
@@ -104,7 +105,7 @@ export default class Game extends Component {
         
 
                     <div className='btn-output'>
-                        {this.showOptionButtons()}
+                        {showButtons}
                         <button  
                             className='btn' 
                             onClick={() => this.showTextNode(3)}>
@@ -124,6 +125,7 @@ export default class Game extends Component {
                     <div className='inventory-output'>
                         <ul>
                             {this.showInventory()}
+                            {console.log('Inventory from render: ', this.state.items)}
                         </ul>
                     </div>
                 </div>
