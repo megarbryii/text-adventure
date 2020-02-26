@@ -52,12 +52,7 @@ export default class Game extends Component {
         }
         this.showTextNode(nextTextNodeId);
     }
-
-    showInventory = () => {
-        console.log('Inventory function: ', this.state.items)
-    } 
-    
-    
+  
     componentWillMount = () => {
         this.gameStart();
         console.log('Component Will Mount Inventory: ', this.state.items);
@@ -94,6 +89,14 @@ export default class Game extends Component {
             )
         })
 
+        const showInventory = this.state.items.map(item => {
+            return (
+                <li key={item.name}>
+                    {item.name}
+                </li>
+            )
+        })
+
         return(
             <div className='game-wrapper'>
                 <div className='left-side'>
@@ -124,8 +127,10 @@ export default class Game extends Component {
 
                     <div className='inventory-output'>
                         <ul>
-                            {this.showInventory()}
                             {console.log('Inventory from render: ', this.state.items)}
+                            if (this.state.items != []) {
+                                showInventory
+                            }
                         </ul>
                     </div>
                 </div>
