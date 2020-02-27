@@ -29,7 +29,7 @@ export default class Game extends Component {
             ],
             currentTextNode: [] 
         })
-        this.showTextNode(0);
+        console.log('Game start: ', this.state.currentTextNode);
     }
 
     showTextNode = (textNodeIndex) => {
@@ -37,12 +37,13 @@ export default class Game extends Component {
        
         output = this.state.currentTextNode.text;
         name = this.state.currentTextNode.name;
-        
+        console.log('Show text node: ', this.state.currentTextNode);
     }
 
   
     componentWillMount = () => {
-        this.gameStart();
+        
+        this.showTextNode(0);
         console.log('Component Will Mount Inventory: ', this.state.items);
         console.log('Component Will Mount TextNode:', this.state.currentTextNode.options);
         
@@ -50,14 +51,21 @@ export default class Game extends Component {
     
 
     componentDidMount = () => {
+        
         if(this.state.currentTextNode != []) {
             this.showTextNode(0);
         }
-        console.log('Component Did Mount TextNode: ', this.state.currentTextNode.options);
+        console.log('Component Did Mount TextNode: ', this.state.currentTextNode);
     }
 
     componentDidUpdate = () => {
-        
+        if(this.state.currentTextNode != this.state.currentTextNode) {
+            this.setState({ currentTextNode: this.state.currentTextNode});
+            this.showTextNode(this.state.currentTextNode);
+            name = this.state.currentTextNode.name;
+            output = this.state.currentTextNode.text;
+        }
+        console.log('Component did update: ', this.state.currentTextNode);
     }
 
     
@@ -90,7 +98,8 @@ export default class Game extends Component {
         return(
             <div className='game-wrapper'>
                 <div className='left-side'>
-
+                    {console.log('Game output name: ',this.state.currentTextNode.name)}
+                    {console.log('Game output text: ', this.state.currentTextNode.text)}
                     <GameOutput 
                         name={name}
                         text={output}
@@ -99,11 +108,6 @@ export default class Game extends Component {
 
                     <div className='btn-output'>
                         {showButtons}
-                        <button  
-                            className='btn' 
-                            onClick={() => this.showTextNode(3)}>
-                            Test
-                        </button>
                     </div>
       
                 </div>

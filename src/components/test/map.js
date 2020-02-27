@@ -2,7 +2,7 @@ const textNodes = [
     {
         id:0,
         name: 'The Grass Menagerie',
-        text: 'You are in a room that is decorated in a variety of luscious green colors.  It has an aroma of freshly cut grass.  You see doors to the east and to the south.',
+        text: 'You are in a room that is decorated in a variety of luscious green colors, and has an aroma of freshly cut grass.  You see doors to the east and to the south.',
         options: [
             {
                 text: 'Go east...',
@@ -85,8 +85,8 @@ const textNodes = [
                 nextText: 7
             },
             {
+                requiredItem: paintCan,
                 text: 'Go south...',
-                requiredState: (currentState) => currentState.paintCan,
                 nextText: 8
             },
             {
@@ -128,8 +128,8 @@ const textNodes = [
                 nextText: 7
             },
             {
+                requiredItem: paintCan,
                 text: 'Go east...',
-                requiredState: (currentState) => currentState.paintCan,
                 nextText: 8
             }
         ]
@@ -191,13 +191,13 @@ const textNodes = [
                 nextText: 7
             },
             {
+                requiredItem: paintCan,
                 text: 'Carry the can of paint back...',
-                requiredState: (currentState) => currentState.paintCan,
                 nextText: 8
             },
-            {
+            {  
+                requiredItem: paintCan,
                 text: 'Use the can of paint on the door...',
-                requiredState: (currentState) => currentState.paintCan,
                 nextText: 10
             }
         ]
