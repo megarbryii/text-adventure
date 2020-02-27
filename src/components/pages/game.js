@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 
 import GameOutput from '../game/gameOutput';
-import Inventory from '../game/inventory';
 
 import textNodes from '../test/map';
 
 var output;
 var name;
-
-const textNode = textNodes[textNodes.id]
-
-
 
 export default class Game extends Component {
     constructor(props){
@@ -26,7 +21,12 @@ export default class Game extends Component {
 
     gameStart = () => {
         this.setState({ 
-            items: [],
+            items: [
+                {
+                    name: 'Can of paint',
+                    paintCan: true
+                }
+            ],
             currentTextNode: [] 
         })
         this.showTextNode(0);
@@ -40,18 +40,6 @@ export default class Game extends Component {
         
     }
 
-        
-    selectOption = (option) => {
-        const nextTextNodeId = this.state.currentTextNode.options.nextText;
-        if (nextTextNodeId === -1) {
-            this.setState({
-                items: [],
-                currentTextNode: []
-            });
-            this.showTextNode(0);
-        }
-        this.showTextNode(nextTextNodeId);
-    }
   
     componentWillMount = () => {
         this.gameStart();
@@ -82,7 +70,7 @@ export default class Game extends Component {
                 <button 
                     key={option.text}
                     className='btn'
-                    onClick={this.selectOption}
+                    onClick={() => this.showTextNode(option.nextText)}
                 >
                     {option.text}
                 </button>
@@ -90,11 +78,13 @@ export default class Game extends Component {
         })
 
         const showInventory = this.state.items.map(item => {
-            return (
-                <li key={item.name}>
-                    {item.name}
-                </li>
-            )
+            if(this.state.items != []) {
+                return (
+                    <li key={item.name}>
+                        {item.name}
+                    </li>
+                )
+            }
         })
 
         return(
@@ -126,12 +116,12 @@ export default class Game extends Component {
                     </div>
 
                     <div className='inventory-output'>
+                    {console.log('Inventory from render: ', this.state.items)}
+                    
                         <ul>
-                            {console.log('Inventory from render: ', this.state.items)}
-                            if (this.state.items != []) {
-                                showInventory
-                            }
+                         {showInventory}       
                         </ul>
+                    
                     </div>
                 </div>
 
