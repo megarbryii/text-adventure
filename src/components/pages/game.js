@@ -64,11 +64,11 @@ export default class Game extends Component {
 
     render(){
         
-        const showButtons = this.state.currentTextNode.options.map(option => {
+        const showButtons = this.state.currentTextNode.options.map((option, index) => {
             console.log('Render from variable showButtons: ', this.state.currentTextNode.options);
             return (
                 <button 
-                    key={option.text}
+                    key={index}
                     className='btn'
                     onClick={() => this.showTextNode(option.nextText)}
                 >
