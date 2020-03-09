@@ -1,24 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class GameOutput extends Component {
-    constructor(props){
-        super(props);
-    }
-
-    render () {
+const GameOutput = (props) => {
         
     return (
         <div className='output-wrapper'>
 
             <div className='output-name'>
-                <h2>{this.props.name}</h2>
+                <h2>{props.name}</h2>
             </div>
 
             <div className='output-text'>
-                <p>{this.props.text}</p>
+                <p>{props.text}</p>
             </div>
 
         </div>
     )
-    }
 }
+
+export default GameOutput;

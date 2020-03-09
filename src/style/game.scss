@@ -2,8 +2,8 @@
     font-family: $game-font;
     font-size: 3rem;
     display: grid;
-    grid-template-columns: [s] 2fr [m] 1fr [e];
-    grid-column-gap: 15px;
+    grid-template-columns: 30px [s] 2fr [m] 1fr [e] 30px;
+    grid-column-gap: 60px;
     
     .left-side{
         grid-column: s/m;
@@ -14,19 +14,25 @@
             display: grid;
             grid-row: input-s/input-e;
             grid-template-columns: repeat(4, auto);
-            grid-gap: 15px;
+            grid-gap: 35px;
             padding: 25px 15px;
 
             .btn {
-                font-family: $game-font;
-                font-size: 2rem;
+                @include btn-base();
                 background-color: $hover-color;
-                color: black;
-                padding: 5px;
+            }
+
+            .btn-lose{
+                @include btn-base();
+                background-color: red;
+            }
+
+            .btn-win {
+                @include btn-base();
+                background-color: yellow;
 
                 &:hover {
-                    opacity: .75;
-                    color: white;
+                    color: black;
                 }
             }
         }
