@@ -1,19 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class GameButton extends Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        return(
-            <button
-                    key={this.props.index}
-                    className='btn'
-                    onClick={() => this.selectOption()}
-                >
-                {this.props.text}
-            </button>
-        )
-    }
+const GameButton = (props) => {
+    return(
+        <button
+                key={props.id}
+                className={`${props.className}`}
+                onClick={props.onClick}
+            >
+            {props.text}
+        </button>
+    )
 }
+
+export default GameButton;    
+        
+    
