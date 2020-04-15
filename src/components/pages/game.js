@@ -19,7 +19,7 @@ export default class Game extends Component{
 
     gameStart = () => {
         this.showRoom(0);
-        this.updateInventory();
+        
     }
 
     showRoom = (room) => {
@@ -28,40 +28,37 @@ export default class Game extends Component{
         })
     }
 
-    updateInventory = () => {
-        this.setState({
-            inventory: [itemInventory[0]]
-        })
-        
-    }
-
     componentWillMount = () => {
         this.gameStart();
         
     }
 
-    componentDidUpdate = () => {
+    shouldComponentUpdate = () => {
+        const { options } = this.state.currentRoom;
+        if(options.id === 19) {
+            this.setState({
+                inventory: [itemInventory[0]]
+            })
+        }
+
+        if(options.id === 25 && this.state.inventory != []) {
+            this.setState({
+                inventory: []
+            })
+        }
+        return true;
     }
 
     render(){
         const { name, description, options } = this.state.currentRoom;
 
         const showInventory = this.state.inventory.map(inv =>{
-            if(options.id = 19) {
-                if(this.state.currentRoom == Rooms[8])
                 return (
                     <Inventory 
                         key={inv.id}
                         name={inv.itemName}
                     />
-
                 )
-            } else if(options.id = 25) {
-                if(this.state.currentRoom = Rooms[9]) {
-                    return null;
-                }
-                
-            }
         })
 
         const showButtons = options.map(option => {
