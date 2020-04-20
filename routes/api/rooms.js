@@ -1,38 +1,41 @@
 const express = require('express');
 const router = express.Router();
 
+//Room model
+const Room = require('../../models/Room');
+
 const rooms = require('../../Rooms');
 
-//Get all rooms
+//@route Get /api/rooms
+//@desc Get all rooms
+//@access Public
 router.get('/', (req, res) => {
-    res.json(rooms);
-})
-
-//Get a single room
-router.get('/:id', (req, res) => {
-    const found = rooms.some(room => room.id === parseInt(req.params.id));
-
-    if(found) {
-        res.json(rooms.filter(room => room.id === parseInt(req.params.id)));
-    } else {
-        res.status(400).json({msg: `No room with the id of ${req.params.id}`});
-    }
+    Room.find()
+        .sort({ id: 1 })
+        .then(rooms => res.json(rooms))
 });
 
-//Create a room
+//@route GET /api/rooms/:id
+//@desc Get one room
+//@access Public
+router.get('/:id', (req, res) => {
+    Room.findById(req.params.id)
+    .then(rooms => res.json(rooms.id))
+    .catch(err => res.status(400).json({msg: `No room with the id of ${req.params.id}`}));
+});
+
+//@route POST /api/rooms
+//@desc Create a room
+//@access Private (currently public)
 router.post('/', (req, res) => {
-    const newRoom = {
+    const newRoom = new Room({
         id: req.body.id,
         name: req.body.name,
-        desc: req.body.desc
-    }
+        desc: req.body.desc,
+        choice: req.body.choice
+    });
 
-    if(!newRoom.id || !newRoom.name || !newRoom.desc) {
-        return res.status(400).json({ msg: 'Please enter an id, name, or description'});
-    }
-
-    rooms.push(newRoom);
-    res.json(rooms);
+    newRoom.save().then(room => res.json(room));
 });
 
 //Update a room
@@ -56,15 +59,13 @@ router.put('/:id', (req, res) => {
     }
 });
 
-//Deleting a room
+//@route DELETE /api/rooms/:id
+//@desc Delete a room
+//@access private(is public for the time being)
 router.delete('/:id', (req, res) => {
-    const found = rooms.some(room => room.id === parseInt(req.params.id));
-
-    if(found) {
-        res.json({msg: 'Room deleted', rooms: rooms.filter(room => room.id !== parseInt(req.params.id))});
-    } else {
-        res.status(400).json({msg: `No room with the id of ${req.params.id}`});
-    }
+    Room.findById(req.params.id)
+    .then(rooms => rooms.remove().then(() => res.json({sucess: true})))
+    .catch(err => res.status(404).json({sucess: false}));
 });
 
 module.exports = router;
