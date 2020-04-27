@@ -15,7 +15,18 @@ const RoomSchema = new Schema({
         type: String,
         required: true
     },
-    choice: [ { choiceText: String, nextRoom: Number } ]
+    choice: [
+        {
+        choiceText: {
+            type: String,
+            required: true
+        },
+        nextRoom: {
+            type: Number,
+            required: true
+        }
+        } 
+    ]
 });
 
 module.exports = Room = mongoose.model('room', RoomSchema);
