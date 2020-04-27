@@ -15,19 +15,35 @@ const rooms = require('../../Rooms');
 //@route Get /api/rooms
 //@desc Get all rooms
 //@access Public
-router.get('/', (req, res) => {
-    Room.find()
-        .sort({ id: 1 })
-        .then(rooms => res.json(rooms))
+router.get('/', async (req, res) => {
+    try {
+        const rooms = Room.find().sort({ room_id: 1 });
+        res.json(rooms);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error')
+    }
 });
 
 //@route GET /api/rooms/:id
 //@desc Get one room
 //@access Public
-router.get('/:id', (req, res) => {
-    Room.findById(req.params.id)
-    .then(rooms => res.json(rooms.id))
-    .catch(err => res.status(400).json({msg: `No room with the id of ${req.params.id}`}));
+router.get('/:id', async (req, res) => {
+    try {
+        const room = Room.findById(req.params.id);
+
+        if(!room) {
+            return res.status(404).json({ msg: 'Room not found!' });
+        }
+
+        res.json(room);
+    } catch (err) {
+        console.error(err.message);
+        if(err.kind === 'ObjectId') {
+            return res.status(404).json({ msg: 'Room not found' });
+        }
+        res.status(500).send('Server Error');
+    }
 });
 
 //@route POST /api/rooms

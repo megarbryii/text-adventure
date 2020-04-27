@@ -24,6 +24,7 @@ mongoose.connect(db, {
 app.use(express.static(path.join(__dirname, 'client', 'public')));
 
 //Rooms API routes
+app.use('/api/users', require('./routes/api/users'));
 app.use('/api/rooms', require('./routes/api/rooms'));
 
 const port = process.env.PORT || 5000;

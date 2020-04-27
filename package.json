@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/megarbryii/text-adventure#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "concurrently": "^5.1.0",
     "config": "^3.3.1",
     "express": "^4.17.1",
