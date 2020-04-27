@@ -48,16 +48,33 @@ router.get('/:id', async (req, res) => {
 
 //@route POST /api/rooms
 //@desc Create a room
-//@access Private (currently public)
-router.post('/', auth, async (req, res) => {
-    const newRoom = new Room({
-        id: req.body.id,
-        name: req.body.name,
-        desc: req.body.desc,
-    });
+//@access Private
+router.post('/', [auth, [
+    check('room_id', 'A valid room id is required').not().isEmpty(),
+    check('name', 'A room name is required').not().isEmpty(),
+    check('desc', 'A room description is required').not().isEmpty()
+]], async (req, res) => {
+    const errors = validationResult(req);
 
-    await newRoom.save().then(room => res.json(room));
-});
+    if(!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const newRoom = {
+            room_id: req.body.room_id,
+            name: req.body.name,
+            desc: req.body.desc
+        }
+
+        const room = await newRoom.save();
+
+        res.json(room);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+})
 
 //@route POST /api/rooms/choices/:id
 //@desc Add choices to a room
@@ -92,24 +109,31 @@ router.post('/choices/:id', [ auth, [
 })
 
 
-//Update a room
-router.put('/:id', (req, res) => {
-    const found = rooms.some(room => room.id === parseInt(req.params.id));
+//@route PUT 'api/rooms/:id'
+//@desc Update a room
+//@access Private
+router.put('/:id', async (req, res) => {
+    try {
+        const room = await Room.findById(req.params.id);
 
-    if(found) {
-        const updRoom = req.body;
+        if(!room) {
+            return res.status(404).json({ msg: 'Room not found' });
+        }
 
-        rooms.forEach(room => {
-            if(room.id === parseInt(req.params.id)) {
-                room.id = updRoom.id ? updRoom.id : id;
-                room.name = updRoom.name ? updRoom.name : name;
-                room.desc = updRoom.desc ? updRoom.desc : desc;
+        const updRoom = {
+            room_id: updRoom.body.id ? req.body.room_id : room_id,
+            name: updRoom.body.name ? req.body.name : name,
+            desc: updRoom.body.desc ? req.body.desc: desc,
+        }
 
-                res.json({msg: 'Room updated', room});
-            }
-        })
-    } else {
-        res.status(400).json({msg: `No member with the id of ${req.params.id}`});
+        await updRoom.save();
+        res.json(updRoom);
+    } catch (err) {
+        console.error(err.message);
+        if(err.kind === 'ObjectId') {
+            return res.status(404).json({ msg: 'Room not found' });
+        }
+        res.status(500).send('Server Error');
     }
 });
 
