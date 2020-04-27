@@ -7,6 +7,8 @@ const auth = require('../../middleware/auth');
 
 //Room model
 const Room = require('../../models/Room');
+//User model
+const User = require('../../models/User');
 
 const rooms = require('../../Rooms');
 
@@ -98,10 +100,29 @@ router.put('/:id', (req, res) => {
 //@route DELETE /api/rooms/:id
 //@desc Delete a room
 //@access Private
-router.delete('/:id', auth, (req, res) => {
-    Room.findById(req.params.id)
-    .then(rooms => rooms.remove().then(() => res.json({sucess: true})))
-    .catch(err => res.status(404).json({sucess: false}));
+router.delete('/:id', auth, async (req, res) => {
+    try {
+        const room = Room.findById(req.params.id);
+
+        if(!room) {
+            return res.status(404).json({ msg: 'Room not found!' });
+        }
+    
+        //Check for user
+        if(room.user.toString() !== req.user.id) {
+            return res.status(401).json({ msg: 'User is not authorized!' });
+        }
+    
+        await room.remove();
+    
+        res.json({ msg: 'Room removed' });
+    } catch (err) {
+        console.error(err.message);
+        if(err.kind === 'ObjectId') {
+            return res.status(404).json({ msg: 'Room not found' });
+        }
+        res.status(500).send('Server Error');
+    }
 });
 
 module.exports = router;
